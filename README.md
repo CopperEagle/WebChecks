@@ -39,7 +39,7 @@ Todos:
 
 ## Installing it
 
-Optionally, you may create a virtual environment using
+Requires Python 3.X. Optionally, you may create a virtual environment using
 
 ```bash
 python3 -m venv path/to/new/venv
