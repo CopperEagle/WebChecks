@@ -1,8 +1,10 @@
 # WebChecks
 
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-green)](https://github.com/pylint-dev/pylint)
+
 ## The project - goals
 
-WebCheck is a BSD-licensed web search and research tool for searching on a given set of domains. It has three goals:
+WebCheck is a BSD-licensed web search and research tool for searching (scraping) on a given set of domains. It has three goals:
 
 - Easy steerability to ensure ethical scraping practices and effectively achieving set goals. This is in part achieved by offering an extensible per (sub)domain profile system allowing to precisely define digital behaviour, access pattern / access frequency amongst other things. *It mandatorely respects robots.txt.* (No, there is no option to disable that.)
 
@@ -70,18 +72,25 @@ proj = Project("project_name", "mywebsite.com/coolsite.html")
 # Allowing all wikipedia sites, regardless of language, like en.wikipedia.org
 # Note that you can use regular expressions here.
 proj.set_allowed_websites((r"(.*\.)?wikipedia\.org", "mywebsite.com")) 
-proj.enable_javascript(False)       # Enabling Javascript? Default value is False.
 
+# Enabling Javascript? Default value is False.
+proj.enable_javascript(False)       
 
-proj.enable_crawl(True) 			# The default value. If False only visits the initially given addresses
+# Whether links in retrieved HTML sources should be visited.
+# The default value is true. If False only visits the initially given addresses.
+proj.enable_crawl(True)
 
-proj.set_min_wait(10)				# Default minimum wait in seconds between two requests to the same domain.
-									# Applies only to domains that have no dedicated profile. (See below.)
-proj.set_avg_wait(10)				# Default average wait time in seconds between two requests to the same domain.
-									# The access timing pattern is randomized.
+# Default minimum wait in seconds between two requests to the same domain.
+# Applies only to domains that have no dedicated profile. (See below.)
+proj.set_min_wait(10)
 
-proj.run(1000)						# translates into seconds (roughly, will finish last 
-									# access before shutting down)
+# Default average wait time in seconds between two requests to the same domain.
+# The access timing pattern is randomized.
+proj.set_avg_wait(10)				
+
+# Translates into seconds. (roughly, will finish last 
+# access before shutting down)
+proj.run(1000)						
 ```
 This will set the initial roots of your search at mywebsite.com/coolsite.html and it will follow any links on that website provided that they are allowed by the security policy you define. The above security policy is fairly simple: You specify just what websites you allow the tool to visit and you disallow Javascript.
 

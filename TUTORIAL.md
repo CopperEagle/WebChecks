@@ -93,19 +93,24 @@ Alternatively, you can access the results in the code directly, using the Access
 
 # from webchecks.archive.AccessNode import AccessNode
 
-acc = proj.access_node()			# returns AccessNode
+# returns AccessNode
+acc = proj.access_node()
 
-print(acc.registered_domains())		# domains that were visited during scraping or
-									# were given a profile by the user
+# Domains that were visited during scraping or
+# were given a profile by the user.
+print(acc.registered_domains())		
+
+# Set of visited URLs. Can use to get the content. See next line.
 print(acc.get_urls_visited("mywebsite.com"))
-	# Set of visited URLs. Can use to get the content. See next line.
 
+
+# Provided that this wesbite was visited, it will return the results
+# that were fetched. Automatically decompresses text if applicable.
 print(acc.get_content("mywebsite.com/coolsite.html"))
-	# provided that this wesbite was visited, it will return the results
-	# that were fetched. Automatically decompresses text if applicable.
 
+# Will return WHERE in the project folder that website is stored.
 print(acc.get_content_location("mywebsite.com/coolsite.html"))
-	# Will return WHERE in the project folder that website is stored.
+
 ```
 
 # Profiles
@@ -125,8 +130,8 @@ class CustomProfile(BaseProfile):
         # Thus, this is specifying the access behavior.
         # access pattern algorithms available:
         # ACCESS_EQUISPACED:  			Every domain gets exactly one request per average wait time
-		# ACCESS_EXPONENTIAL_RND: 		The request pattern to any domain follows an exponential distribution with the given average wait time (but here it is randomized)
-		# ACCESS_EXPONENTIAL_RND_MIN	Like above but additionally it respects the minimum wait time between requests to a domain 
+        # ACCESS_EXPONENTIAL_RND: 		The request pattern to any domain follows an exponential distribution with the given average wait time (but here it is randomized)
+        # ACCESS_EXPONENTIAL_RND_MIN	Like above but additionally it respects the minimum wait time between requests to a domain 
         access_pattern = ACCESS_EXPONENTIAL_RND_MIN
         avg_wait_after_request = 25 # seconds per domain
         min_wait_after_request = 20 # seconds per domain
@@ -136,41 +141,41 @@ class CustomProfile(BaseProfile):
         # ...
 
     def get_links(self, url : str, html_source : str):
-    	"""For a given website and corresponding URL, choose what links to extract and
-    	to click next (inserting into the sending queue).
+        """For a given website and corresponding URL, choose what links to extract and
+        to click next (inserting into the sending queue).
 
-    	Parameters
+        Parameters
         ---------
         url : str
             URL of the html source at hand.
         html_source : str 
             The HTML source
-    	"""
-    	links = []
+        """
+        links = []
 
-    	# ... use html_source (enter your code)
+        # ... use html_source (enter your code)
 
-		return self._register_urls(links) # mandatory
+        return self._register_urls(links) # mandatory
 
     def consume_retreived_content(self, url : str, resp_header : dict, content : bytes):
-    	"""After a webaccess happened, this function is called. The main purpose is to
-    	process the data and store it.
+        """After a webaccess happened, this function is called. The main purpose is to
+        process the data and store it.
 
-    	Parameters
+        Parameters
         ---------
         url : str
             URL that was accessed
         resp_header : dict
             The HTTP response header.
         content : bytes
-        	The actual data that was received.
-    	"""
-    	self._deregister_url(url) # mandatory
+            The actual data that was received.
+        """
+        self._deregister_url(url) # mandatory
 
-    	# ... process content (enter your code)
+        # ... process content (enter your code)
 
-    	metadata = f"Retrived {time.asctime()}\nURL {url} ..."
-		filename = self.archive.save_content(url, resp_header, content, metadata)
+        metadata = f"Retrived {time.asctime()}\nURL {url} ..."
+        filename = self.archive.save_content(url, resp_header, content, metadata)
 
 proj.install_profile(CustomProfile())
 ```
