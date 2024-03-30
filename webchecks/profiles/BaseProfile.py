@@ -71,13 +71,11 @@ class BaseProfile:
 
         self.archive.save_at_shutdown(self._get_links_visited)
 
-    def _quiet_exit(self):
+    def quiet_exit(self):
         """Disables exiting functions that do backup and print some things.
         DO NOT USE THIS UNLESS YOU REALLY KNOW WHAT YOU ARE DOING.
-        This is also the reason why private access is signaled: It may
-        corrupt the project if inproperly used and thus it is better to
-        hide it from the user."""
-        self.archive._quiet_exit()
+        It may CORRUPT the project if improperly used."""
+        self.archive.quiet_exit()
 
 
     def get_domain(self) -> str:

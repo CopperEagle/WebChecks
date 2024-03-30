@@ -42,12 +42,10 @@ class FileArchive:
         self.reporter = Report() # pylint: disable=no-value-for-parameter
         self.cache = GlobalCache()
 
-    def _quiet_exit(self):
+    def quiet_exit(self):
         """Disables exiting functions that do backup and print some things.
         DO NOT USE THIS UNLESS YOU REALLY KNOW WHAT YOU ARE DOING.
-        This is also the reason why private access is signaled: It may
-        corrupt the project if inproperly used and thus it is better to
-        hide it from the user."""
+        It max CORRUPT the project if improperly used."""
         atexit.unregister(self._save_at_shutdown)
 
     def _locate_dir(self, location):

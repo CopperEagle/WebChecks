@@ -83,7 +83,7 @@ class GatewayTest(unittest.TestCase):
         config[WHITELIST_DOMAINS] = ("noexistent-website-2221212.org",)
 
         proj = Project(_PROJECT_NAME, "noexistent-website-2221212.org")
-        proj._quiet_exit()
+        proj.quiet_exit()
 
         gw = GateWay()
         self.assertFalse(gw.add_to_queue("noexistent-website-2221212.org"))

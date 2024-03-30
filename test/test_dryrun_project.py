@@ -24,7 +24,7 @@ class ProjectTest(unittest.TestCase):
         
         proj = Project(_PROJECT_NAME, "website.org")
         proj.install_profile(SomeWebsiteProfile())
-        proj._quiet_exit()
+        proj.quiet_exit()
         self.delete(_PROJECT_NAME)
         
         for k, v in configcopy.items():
@@ -34,7 +34,7 @@ class ProjectTest(unittest.TestCase):
         os.mkdir(_PROJECT_NAME) 
         proj2 = Project(_PROJECT_NAME, "en.website.org")
         proj2.install_profile(SomeWebsiteProfile())
-        proj2._quiet_exit()
+        proj2.quiet_exit()
         for k, v in configcopy.items():
             config[k] = v
 
@@ -65,7 +65,7 @@ class ProjectTest(unittest.TestCase):
 
 
         proj3.install_profile(SomeWebsiteProfile())
-        proj3._quiet_exit()
+        proj3.quiet_exit()
         self.delete(_PROJECT_NAME)
 
 

@@ -53,19 +53,15 @@ class Project:
         self.acc_node = AccessNode()
         atexit.register(self.__report)
 
-    def _quiet_exit(self):
+    def quiet_exit(self):
         """Disables exiting functions that do backup and print some things.
+        May diable automatic saving mechanisms, among other things.
         DO NOT USE THIS UNLESS YOU REALLY KNOW WHAT YOU ARE DOING.
-        This is also the reason why private access is signaled: It may
-        corrupt the project if inproperly used and thus it is better to
-        hide it from the user."""
+        It may CORRUPT the project if improperly used.
+        """
         atexit.unregister(self.__report)
         for _, profile in profiledb.items():
-            profile._quiet_exit() 
-            # bad style accesing private members of other classes? 
-            # maybe. But accidental use may corrupt the
-            # Project. So let's make it hard to break things.
-            # Note that people deal with profiles directly.
+            profile.quiet_exit()
 
     def seek(self, keywords = None): # pylint: disable=unused-argument
         """Not yet implemented. Ignore."""
@@ -279,7 +275,7 @@ class Project:
         but that will probably just copy your code into the project folder."""
         if profile.domain in profiledb:
             # Only one can execute the shutdown functionality.
-            profiledb[profile.domain]._quiet_exit()
+            profiledb[profile.domain].quiet_exit() 
         add_profile(profile)
 
     def set_logging_level(self, log_level : int):

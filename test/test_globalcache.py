@@ -20,7 +20,7 @@ class GlobalCacheTest(unittest.TestCase):
         configcopy = config.copy()
         
         proj = Project(_PROJECT_NAME, "website.org")
-        proj._quiet_exit()
+        proj.quiet_exit()
         glc = GlobalCache()
         ## yeah, ugly. It's because we open many Projects during testing,
         ## so we need to reinitialize.
