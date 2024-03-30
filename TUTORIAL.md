@@ -83,7 +83,7 @@ Note that all methods concerning the security policy except *enable_javascript* 
 
 By default, it currently stores all pages in a correspnding directory.
 The root of that directory is the project directory specified when
-creating the Project object. You check out the results there, especially 
+creating the Project object. You can check out the results there, especially 
 if you do not compress the text data, i.e. ```proj.set_compress_text(False)```
 Alternatively, you can access the results in the code directly, using the AccessNode interface:
 

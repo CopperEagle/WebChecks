@@ -1,10 +1,16 @@
 # WebChecks
 
-[![linting: pylint](https://img.shields.io/badge/linting-pylint-green)](https://github.com/pylint-dev/pylint)
+[![Python](https://img.shields.io/badge/Python-3.10-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![Version](https://img.shields.io/badge/Webchecks_version-0.1-darkgreen)]
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Linting: Pylint](https://img.shields.io/badge/linting-pylint-green)](https://github.com/pylint-dev/pylint)
+
+[![Linting Score](https://img.shields.io/badge/Linting_score-9.52/10.0-green)]
+[![Test Coverage](https://img.shields.io/badge/Test_coverage-87%25-green)]
 
 ## The project - goals
 
-WebCheck is a BSD-licensed web search and research tool for searching (scraping) on a given set of domains. It has three goals:
+WebCheck is a BSD-licensed web search and research tool for searching on a given set of domains given some starting web addresses. It has three goals:
 
 - Easy steerability to ensure ethical scraping practices and effectively achieving set goals. This is in part achieved by offering an extensible per (sub)domain profile system allowing to precisely define digital behaviour, access pattern / access frequency amongst other things. *It mandatorely respects robots.txt.* (No, there is no option to disable that.)
 
@@ -41,7 +47,7 @@ Todos:
 
 ## Installing it
 
-Requires Python 3.X. Optionally, you may create a virtual environment using
+Requires Python 3.10+. Optionally, you may create a virtual environment using
 
 ```bash
 python3 -m venv path/to/new/venv
@@ -69,8 +75,8 @@ from webchecks import Project
 # Give name and starting address. The latter may be a list of URLs.
 proj = Project("project_name", "mywebsite.com/coolsite.html")
 
-# Allowing all wikipedia sites, regardless of language, like en.wikipedia.org
-# Note that you can use regular expressions here.
+# Allowing to visit mywebsite.com and all wikipedia sites, regardless of language, 
+# like en.wikipedia.org. Note that you can use regular expressions here.
 proj.set_allowed_websites((r"(.*\.)?wikipedia\.org", "mywebsite.com")) 
 
 # Enabling Javascript? Default value is False.
