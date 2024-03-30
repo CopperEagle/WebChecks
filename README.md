@@ -1,12 +1,12 @@
 # WebChecks
 
 [![Python](https://img.shields.io/badge/Python-3.10-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
-[![Version](https://img.shields.io/badge/Webchecks_version-0.1-darkgreen)]
+[Version](https://img.shields.io/badge/Webchecks_version-0.1-darkgreen)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Linting: Pylint](https://img.shields.io/badge/linting-pylint-green)](https://github.com/pylint-dev/pylint)
 
-[![Linting Score](https://img.shields.io/badge/Linting_score-9.52/10.0-green)]
-[![Test Coverage](https://img.shields.io/badge/Test_coverage-87%25-green)]
+[Linting Score](https://img.shields.io/badge/Linting_score-9.52/10.0-green)
+[Test Coverage](https://img.shields.io/badge/Test_coverage-87%25-green)
 
 ## The project - goals
 
