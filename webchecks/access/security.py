@@ -51,11 +51,13 @@ def is_allowed_url(url : str) -> bool:
 
     res = True
 
-    if single_domain_only is not None:
-        input_check(isinstance(single_domain_only, str) and is_url(single_domain_only),
-        "security.py: Restricting to single domain requires single_domain_only to be\
-        the corresponding URL of that allowed domain.")
-        res = extract_domain(single_domain_only) == extract_domain(url)
+    if single_domain_only:
+        input_check(isinstance(single_domain_only, str),
+        # and is_url(single_domain_only), allows re
+        "security.py: Restricting to single domain requires single_domain_only to be "
+        "the corresponding URL of that allowed domain.")
+        res = is_legal_domain(url, (single_domain_only,))
+        # extract_domain(single_domain_only) == extract_domain(url)
 
     ## TODO allow only explicitly allowed fileextensions
 
@@ -73,7 +75,7 @@ def is_allowed_url(url : str) -> bool:
     if enable_blindly_trusted_tld and is_legal_tld(url, config[BLINDLY_TRUSTED_TLD]):
         res = True
     ## avoid explicitly forbidden tlds
-    if is_legal_domain(url, config[BLACKLISTED_TLD]):
+    if is_legal_tld(url, config[BLACKLISTED_TLD]):
         res = False
     return res
 
@@ -89,8 +91,6 @@ def is_generic_redirect(url : str):
         The URL to be checked.
     """
     url = extract_local_path_and_args(url)
-    if url is None:
-        return False
     dec_url = unquote(url)
     ## Note that a link may be escaped multiple times. (Example youtube link
     ## to sign in.)

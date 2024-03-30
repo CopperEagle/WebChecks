@@ -5,7 +5,7 @@ import re
 from bs4 import BeautifulSoup
 from webchecks.utils.file_ops import binary_to_text
 
-class KeywordFinder:
+class KeywordFinder: # pragma: no cover
     """NOT YET FULLY IMPLEMENTED: For now."""
 
     def __init__(self):

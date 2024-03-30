@@ -53,6 +53,19 @@ class Project:
         self.acc_node = AccessNode()
         atexit.register(self.__report)
 
+    def _quiet_exit(self):
+        """Disables exiting functions that do backup and print some things.
+        DO NOT USE THIS UNLESS YOU REALLY KNOW WHAT YOU ARE DOING.
+        This is also the reason why private access is signaled: It may
+        corrupt the project if inproperly used and thus it is better to
+        hide it from the user."""
+        atexit.unregister(self.__report)
+        for _, profile in profiledb.items():
+            profile._quiet_exit() 
+            # bad style accesing private members of other classes? 
+            # maybe. But accidental use may corrupt the
+            # Project. So let's make it hard to break things.
+            # Note that people deal with profiles directly.
 
     def seek(self, keywords = None): # pylint: disable=unused-argument
         """Not yet implemented. Ignore."""
@@ -115,7 +128,7 @@ class Project:
             Number of seconds to crawl.
         """
 
-        gateway = Gateway.GateWay()
+        gateway = Gateway.GateWay() # new Gateway, in case of multiple runs...
         accesshead = AccessHead.AccessHead(self.initial_seed_urls)
         accesshead.run(gateway, n_seconds)
 
@@ -162,6 +175,7 @@ class Project:
 
             proj.set_allowed_websites((r"(.*\.)?wikipedia\.org",))
         Allowing all wikipedia pages, regardless of language (like en.wikipedia.org).
+        Note that if the prefix r'(.*\.)?' was omitted then subdomains would not be allowed.
 
         By default, this list is empty and ignored (i.e. all websites are allowed by default).
 
@@ -201,8 +215,8 @@ class Project:
             Set of TLDs that are allowed.
             Default value is empty list and ignored. Note: Omit the '.'
         """
-        config[ENABLE_BLINDLY_TRUSTED_TLD] = True
-        config[WHITELISTED_TLD_ONLY] = whitelisted_tld
+        config[WHITELISTED_TLD_ONLY] = True
+        config[WHITELIST_TLD] = whitelisted_tld
 
     def sec_blindly_trusted_tld(self, blindly_trusted_tlds : Collection[str]):
         """Part of the security policy.
@@ -263,6 +277,9 @@ class Project:
         Currently this will not remember the profile after shutdown.
         Thus you need to pass it on everytime you run your script. May change somewhen,
         but that will probably just copy your code into the project folder."""
+        if profile.domain in profiledb:
+            # Only one can execute the shutdown functionality.
+            profiledb[profile.domain]._quiet_exit()
         add_profile(profile)
 
     def set_logging_level(self, log_level : int):

@@ -71,6 +71,14 @@ class BaseProfile:
 
         self.archive.save_at_shutdown(self._get_links_visited)
 
+    def _quiet_exit(self):
+        """Disables exiting functions that do backup and print some things.
+        DO NOT USE THIS UNLESS YOU REALLY KNOW WHAT YOU ARE DOING.
+        This is also the reason why private access is signaled: It may
+        corrupt the project if inproperly used and thus it is better to
+        hide it from the user."""
+        self.archive._quiet_exit()
+
 
     def get_domain(self) -> str:
         """Get the domain name."""
@@ -129,7 +137,7 @@ class BaseProfile:
         atags = html_soup.find_all("a")
         for tag in atags:
             link = tag.get("href")
-            if link is None:
+            if link in (None, ""):
                 continue
             if url_is_superlocal(link): ## means it just copies the protocol '//newpage.com'
                 link = link.replace("//", "")
@@ -177,7 +185,7 @@ class BaseProfile:
         this domain is being accessed. 
 
         Parameters:
-		------------
+        ------------
         algorithm: Option from profiles/ProfileConstants: 
             ACCESS_EXPONENTIAL_RND_MIN: Ensures that while random,
             	the wait time has at least some minimum.
@@ -203,7 +211,7 @@ class BaseProfile:
             	avg_wait_time = avg_wait_time
             	)
 
-        if algorithm == ACCESS_EXPONENTIAL_RND_MIN:
+        elif algorithm == ACCESS_EXPONENTIAL_RND_MIN:
             self.get_wait_time = partial(
             	self._get_wait_time_equispaced_rnd_min,
             	avg_wait_time = avg_wait_time,

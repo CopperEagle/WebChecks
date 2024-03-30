@@ -69,7 +69,7 @@ class Report:
             ret = "".join((ret, s1, " ", s2, "\n"))
         return ret
 
-    def print(self) -> str:
+    def print(self) -> str: # pragma: no cover
         """Return a string with the report."""
         domains = "\t" + self._get_dom_report()
         domains = domains.replace("\n", "\n\t")

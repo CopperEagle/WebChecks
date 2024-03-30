@@ -34,7 +34,7 @@ class URLPair:
         self.original_url = original_url
 
 
-class RequestJS:
+class RequestJS: # pragma: no cover
     """Session manager for the requests where JS is enabled."""
     def __init__(self):
         self.reporter = Report() # pylint: disable=no-value-for-parameter

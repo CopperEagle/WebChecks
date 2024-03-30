@@ -23,7 +23,7 @@ class GlobalCache:
         create_db = not os.path.exists(self.metadb)
         self.db = sqlite3.connect(self.metadb)
         if create_db:
-            print("Creating DB")
+            #print("Creating DB")
             self._create_db()
 
     def __del__(self):

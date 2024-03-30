@@ -19,12 +19,16 @@ def __extract(url : str):
 
 def extract_protocol(url : str) -> str:
     """Returns, given some url, the protocol that it uses.
-    If there is none present, it will return None."""
+    If there is none present, it will return None.
+    If the string passed in is not an url, it will raise an InputError.
+    """
 
     return __extract(url).group(2)
 
 def extract_domain_name(url : str) -> str:
     """Returns, given some url, the domain name.
+    If the string passed in is not an url, it will raise an InputError.
+
     Example:
     
     extract_domain_name('https://hello.world.com/ok') == 'world'
@@ -34,14 +38,17 @@ def extract_domain_name(url : str) -> str:
     return __extract(url).group(5)
 
 def extract_fully_qualified_domain_name(url : str) -> str:
-    """Returns the FQDN."""
-    subdom = __extract(url).group(4)
+    """Returns the FQDN.
+    If the string passed in is not an url, it will raise an InputError.
+    """
+    subdom = __extract(url).group(3)
     if subdom is None:
         subdom = ""
     return subdom + extract_domain(url)
 
 def extract_domain(url : str) -> str:
     """Returns for given url, the domain.
+    If the string passed in is not an url, it will raise an InputError.
     
     extract_domain('https://ok.world.go') == 'world.go'
     """
@@ -70,6 +77,7 @@ def extract_local_path_and_args(url : str) -> str:
 def add_protocol(protocol : str, url : str) -> str:
     """Adds a protocol to an url that has no protocol yet specified.
     If the url passed in already has a protocol, it will raise a ValueError.
+    If the string passed in is not an url, it will raise an InputError.
     """
 
     m = __extract(url)
@@ -90,6 +98,8 @@ def change_protocol(protocol : str, url : str) -> str:
 
 def is_url(url : str) -> bool:
     """For a given string returns whether it has the format of an url.
+
+    If nonstring then False.
     """
 
     try:
@@ -113,6 +123,7 @@ def is_legal_tld(url : str, allowed_tlds : Collection[str]) -> bool:
 def is_legal_domain(url : str, allowed_domains : Collection[str]) -> bool:
     """For a given url tells whether its domain is in the set/tuple/list
     of permitted domains.
+    InputError if url not str.
     """
     dom = extract_fully_qualified_domain_name(url)
     for ad in allowed_domains:
@@ -123,9 +134,13 @@ def is_legal_domain(url : str, allowed_domains : Collection[str]) -> bool:
 
 def url_is_referencial(url : str) -> bool:
     """Returns bool whether the local URL refers to the same page, just a different section.
+    InputError if not str.
+
     Example:
         '#Summary'
     """
+    if not isinstance(url, str):
+        raise InputError("url_is_referencial: URL should be string.")
     if url.startswith("#"):
         return True
     return False
@@ -155,7 +170,12 @@ def url_is_local(url : str) -> bool:
 
 def url_is_superlocal(link : str):
     """ Returns whether the link is 'superlocal': Leaving out just the protocol.
-    //okay.com in an href is superlocal. It just copies the protocol"""
+    //okay.com in an href is superlocal. It just copies the protocol.
+
+    If not a string then it will raise an InputError."""
+
+    if not isinstance(link, str):
+        raise InputError("url_is_referencial: URL should be string.")
     if link.startswith("//"):
         return is_url(link[2:])
     return False
@@ -187,7 +207,7 @@ def remove_args_from_url(link : str) -> str:
 def extract_local_path_without_args(link : str) -> str:
     """Remove domain name, query and local reference from the URL."""
     l = extract_local_path_and_args(link)
-    if l is None:
+    if l == "":
         return ""
     return remove_args_from_url(l)
 

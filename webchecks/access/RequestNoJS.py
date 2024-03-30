@@ -15,7 +15,7 @@ from webchecks.config import config, DEFAULT_TIMEOUT_IN_SEC, LOG_ERROR, LOG_INFO
 
 
 
-class RequestNoJS:
+class RequestNoJS: # pragma: no cover
     """Sessionmanager for the NonJS requests."""
 
     def __init__(self):

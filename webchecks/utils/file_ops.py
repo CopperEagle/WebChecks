@@ -5,7 +5,8 @@ import re
 from hashlib import md5
 from typing import Tuple
 from mimetypes import guess_all_extensions, guess_type, guess_extension
-from .url import extract_local_path_without_args
+from .Error import InputError
+from .url import extract_local_path_without_args, remove_args_from_url
 
 
 def text_to_binary(text : str) -> bytes:
@@ -40,7 +41,9 @@ def get_file_name_from_url(url : str, fext : str = "") -> str:
         path = path + fext
     #print(f"For {url} returned name {path}")
     if len(path) > 150: # there are some maximums...
+        path = (fext.join(path.split(fext)[:-1]))
         path = path[:150]
+        path = path + fext
     return path
 
 
@@ -51,7 +54,8 @@ def refd_content_may_have_fileformat(url : str, fmt : str, content = None) -> bo
     """Tries to guess, given just the url, the file type that the request to that
     url would return. Keep in mind that this cannot be definitively answered 
     just using the url as urls may resolve even nondeterministically, url usually
-    specify no file format at all, etc.
+    specify no file format at all, etc. If true then you know it likely is, if 
+    False it may still be but potentially unlikely.
     
     Ignores the content.
 
@@ -67,7 +71,13 @@ def refd_content_may_have_fileformat(url : str, fmt : str, content = None) -> bo
     if not fmt.startswith("."):
         fmt = "." + fmt
     if guess_type(url)[0] is None:
-        return False
+        try:
+            lp = remove_args_from_url(url)
+            if lp == url:
+                return False
+            return refd_content_may_have_fileformat(lp, fmt) 
+        except InputError:
+            return False
     return fmt in guess_all_extensions(guess_type(url)[0], False)
 
 

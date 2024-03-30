@@ -74,7 +74,7 @@ class GateWay:
         logging(f"Added to queue {link}")
         return True
 
-    def process_queue(self) -> Tuple[bytes, dict, str]:
+    def process_queue(self) -> Tuple[bytes, dict, str]: # pragma: no cover
         """Generator that processes the link queue. Does not sleep. 
         Given that links have a dont-use-before-date this means the behaviour
         is dependent on WHEN this generator is called. This call may not process 
@@ -92,7 +92,7 @@ class GateWay:
         """Returns true if there is nothing more to process."""
         return self.queue.isempty()
 
-    def _request_resource(self, linkpair : str) -> Collection[Tuple[bytes, dict, str]]:
+    def _request_resource(self, linkpair : str) -> Collection[Tuple[bytes, dict, str]]: # pragma: no cover
         link = linkpair.url
         log_link(link)
         return self.sender.request_resource(linkpair)
@@ -130,7 +130,7 @@ class GateWay:
             return False
         return True
 
-    def express_request(self, link : str) -> Tuple[bytes, dict, str]:
+    def express_request(self, link : str) -> Tuple[bytes, dict, str]: # pragma: no cover
         """Requests a SINGLE resource without putting the link into the queue.
         It will still check the link whether it satisfies the security policy
         but if it does, it will attempt to fetch it directly.

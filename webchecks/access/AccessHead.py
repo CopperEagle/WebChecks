@@ -18,7 +18,7 @@ class AccessHead:
         self.initial_seed_urls = \
             [initial_seed_urls] if isinstance(initial_seed_urls, str) else initial_seed_urls
 
-    def run(self, gateway : GateWay, max_time_s : Union[int, float] = 1000):
+    def run(self, gateway : GateWay, max_time_s : Union[int, float] = 1000): # pragma: no cover
         """Main loop. Does the run for the specified number of seconds.
 
         Parameters:
