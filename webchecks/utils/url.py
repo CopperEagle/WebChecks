@@ -1,19 +1,20 @@
+"""Provides utilities to extract information and modify URLs."""
 
 import re
-import typing
 from typing import Collection
-
 from mimetypes import guess_type
-from webchecks.config import config, FILEEXTENSIONS
+
+from .Error import InputError
 
 URL = re.compile(r"^(([a-z]*)://)?(([a-zA-Z0-9\-]+\.)*)([a-zA-Z0-9\-]+)\.([a-z]+)(/.*)?$")
 
 def __extract(url : str):
-    if type(url) != str:
-        raise ValueError("URL is not string type thus not a url.")
+    if not isinstance(url, str):
+        raise InputError("URL is not string type thus not a url.")
     m = re.match(URL, url)
     if not m:
-        raise ValueError(f"Tried to extract url information from {url} which appears to be no valid url.")
+        raise InputError(f"Tried to extract url information from {url}"
+            " which appears to be no valid url.")
     return m
 
 def extract_protocol(url : str) -> str:
@@ -33,6 +34,7 @@ def extract_domain_name(url : str) -> str:
     return __extract(url).group(5)
 
 def extract_fully_qualified_domain_name(url : str) -> str:
+    """Returns the FQDN."""
     subdom = __extract(url).group(4)
     if subdom is None:
         subdom = ""
@@ -54,7 +56,7 @@ def extract_tld(url : str) -> str:
 
 def extract_local_path_and_args(url : str)-> str:
     """Given url, it returns the local path and arguments in the url."""
-    
+
     return __extract(url).group(7)
 
 def add_protocol(protocol : str, url : str) -> str:
@@ -63,7 +65,7 @@ def add_protocol(protocol : str, url : str) -> str:
     """
 
     m = __extract(url)
-    if m.group(2) != None:
+    if m.group(2) is not None:
         raise ValueError(f"Url {url} to add protocol {protocol} \
         already has a protocol, {m.group(2)}.")
     return "".join([protocol, "//:", url])
@@ -83,9 +85,10 @@ def is_url(url : str) -> bool:
     """
 
     try:
-        m = __extract(url)
-        return True
-    except ValueError:
+        if __extract(url):
+            return True
+        return False
+    except InputError:
         return False
 
 def is_legal_tld(url : str, allowed_tlds : Collection[str]) -> bool:
@@ -133,11 +136,11 @@ def url_is_local(url : str) -> bool:
         return True
     # okay LOOKS like a full url...
     # problem: may mistake file extension for a TLD
-    if extract_protocol(url) is not None: 
+    if extract_protocol(url) is not None:
         return False # local paths have no protocol
     if extract_local_path_and_args(url) is not None:
         return False # local paths have no further local path
-    
+
     if guess_type(url)[0] is not None:
         return True # okay the file extension is recognized
     return False
@@ -189,6 +192,6 @@ def strong_strip_query_from_url(url : str) -> str:
     does not end with a '/'.
     """
     u = strip_query_from_url(url)
-    if u.endswith("/"): u = u[:-1]
+    if u.endswith("/"):
+        u = u[:-1]
     return u
-

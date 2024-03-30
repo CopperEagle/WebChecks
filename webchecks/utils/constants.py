@@ -1,6 +1,9 @@
-
-## This allows easy development but also if the user prints datastructures (e.g. dictionaries) using these constants,
-## it is still human readable.
+"""
+Defines the constants, most are for the config dictionary.
+Rather than using strings as keys directly, these constants are used.
+This allows easier development (typo errors fail non silently) but also if the 
+user prints config, it is still human readable.
+"""
 
 WHITELIST_DOMAINS = "whitelist_domains"
 WHITELIST_TLD = "whitelist_tld"

@@ -1,11 +1,9 @@
-import typing
+"""Provides a store for all profiles."""
 
-
-from .BaseProfile import BaseProfile
-from webchecks.utils.Error import ValueError
 from webchecks.utils.url import extract_domain
 from webchecks.utils.messaging import logging
 from webchecks.config import LOG_WARNING
+from .BaseProfile import BaseProfile
 
 
 

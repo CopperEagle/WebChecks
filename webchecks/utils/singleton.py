@@ -1,3 +1,4 @@
+"""Provides the singleton decorator."""
 
 def singleton(cls):
     """Avoids creating more than a single object for this class."""

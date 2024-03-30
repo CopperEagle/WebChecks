@@ -1,4 +1,6 @@
+"""Provides the project's configuration dictionary."""
 
+# pylint: disable-next=wildcard-import
 from webchecks.utils.constants import *
 
 ### The user should not modify these directly. Instead, use the Project interface.
@@ -28,12 +30,14 @@ config = {
     BLACKLISTED_TLD : (),
 
     LOCATION_FIREFOX_DRIVER : '',
-    # put the root directory your default profile path here, you can check it by opening Firefox and then pasting 'about:profiles' into the url field 
+    # put the root directory your default profile path here, you can check
+    # it by opening Firefox and then pasting 'about:profiles' into the url field
     PROFILE_FIREFOX_BROWSER : '',
     BROWSER_CLEAN_SHEET_SETUP : True,
     DEFAULT_TIMEOUT_IN_SEC : 20,
 
-    RESULT_STORAGE_LOCATION : "content", # allows other directories like /metadata for project-level metadata
+    # allows other directories like /metadata for project-level metadata
+    RESULT_STORAGE_LOCATION : "content",
     CACHE_STORAGE_LOCATION : "content/.cache",
     COMPRESS_CONTENT : True,
     ## these are defalt policies for profiles.
@@ -45,7 +49,8 @@ config = {
     #DEFAULT_ALLOWED_FILE_EXTENSIONS : ("html", "xhtml", "pdf"),
 
     ## Robots.txt policy
-    UNGUIDED_ACCESS_POLICY : "strict", # free or strict : determines what to do if no robots.txt file available
+    # free or strict : determines what to do if no robots.txt file available
+    UNGUIDED_ACCESS_POLICY : "strict",
     AGENT_NAME : "Python webclient",
 
     ## Default minimum delay between two accesses to the same domain
@@ -60,5 +65,4 @@ javascript_checklist =  {
     "*" : TRUSTED
     # "goodsite.com" : TRUSTED
     # "badsite.com" : UNTRUSTED
-
 }

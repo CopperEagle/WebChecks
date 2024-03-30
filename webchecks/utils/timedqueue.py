@@ -1,7 +1,8 @@
-import typing
+"""Provides the TimedQueue class."""
+
 from typing import Union, Any
 
-class TimedQueue(object):
+class TimedQueue:
     """
     Multi queue that allows to specify delays between the different elements of one queue.
     The user can specify the queue using the key. Each element of that queue has a delay
@@ -17,12 +18,13 @@ class TimedQueue(object):
         self.timestamp = 0
         self.value = 1
 
-    def enqueue(self, key, value : Any, delay : Union[int, float], current_time : Union[int, float]):
+    def enqueue(self, key, value : Any, delay : Union[int, float],
+            current_time : Union[int, float]):
         """
-        Add an element to the queue. Note that if the specified queue is empty, that new element will be delayed by
-        the specified amount too. Return is void.
+        Add an element to the queue. Note that if the specified queue is empty, 
+        that new element will be delayed by the specified amount too. Return is void.
 
-        Paramters:
+        Parameters:
         -------------
         key: Hashable Object
             Specifies the queue. Can be any hashable object.
@@ -48,7 +50,7 @@ class TimedQueue(object):
         """
         Pop an element who has been long enough in the queue and has passed its delay requirement.
 
-        Paramters:
+        Parameters:
         -------------
         current_time: int or float
             The current timestamp. This may e.g. be Nanoseconds after program start.
@@ -61,17 +63,17 @@ class TimedQueue(object):
             if self.queue[key][0][self.timestamp] <= current_time:
                 ret = self.queue[key][0] # the first element
                 self.queue[key] = self.queue[key][1:] # all other elements remain
-                if (len(self.queue[key]) > 0): # make sure first element has nonrelative timestamp
-                    self.queue[key][0] = (self.queue[key][0][0] + current_time, 
+                if len(self.queue[key]) > 0: # make sure first element has nonrelative timestamp
+                    self.queue[key][0] = (self.queue[key][0][0] + current_time,
                         self.queue[key][0][1])
                 return ret[1]
         return None
-    
+
     def isempty(self):
         """
         Returns boolean, signaling whether the queue is empty.
         """
-        for key in self.queue:
-            if len(self.queue[key]) > 0:
+        for (_, domain_queue) in self.queue.items():
+            if len(domain_queue) > 0:
                 return False
         return True

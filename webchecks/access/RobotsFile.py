@@ -1,19 +1,18 @@
+"""Provides the RobotsFile class which manages robots.txt files for any domain required."""
 
 import os
 import re
-import typing
 from functools import partial
 from typing import List, Callable
 
 from webchecks.archive.GlobalCache import GlobalCache, DURATION_DAY
 from webchecks.utils.url import extract_local_path_without_args, extract_fully_qualified_domain_name
-from webchecks.profiles.profileDB import fetch_profile
 from webchecks.config import config, UNGUIDED_ACCESS_POLICY, LOG_ERROR, AGENT_NAME, LOG_INFO
 from webchecks.utils.messaging import logging
 
 
 
-class RobotsFile(object):
+class RobotsFile:
     """Class that manages Robots.txt file. Provides the check_robots_txt method
     that allows to check if a given link is allowed to be accessed by the policy."""
 
@@ -39,23 +38,27 @@ class RobotsFile(object):
             return True
 
         # okay so we need to get the robots.txt file...
-        hash = self.globalcache.get_hash(domain, "robots.txt")
+        filehash = self.globalcache.get_hash(domain, "robots.txt")
         recent_hash = self._get_hash(domain)
-        if hash == recent_hash: ## okay is still up to date
+        if filehash == recent_hash: ## okay is still up to date
             return self.check_rules(self.rules[domain], path)
-        elif recent_hash == b"" and hash is not None: # hash not None means okay still up to date
+        if recent_hash == b"" and filehash is not None: # hash not None means okay still up to date
             logging(f"Successfully loaded cached robots.txt for domain {domain}.", LOG_INFO)
-            self.robots_txt_hashes[domain] = hash
-            self.rules[domain] = self.parse_robotstxt(self.globalcache.load(domain, "robots.txt")[0])
+            self.robots_txt_hashes[domain] = filehash
+            self.rules[domain] = self.parse_robotstxt(
+                self.globalcache.load(domain, "robots.txt")[0]
+                )
             return self.check_rules(self.rules[domain], path)
-        else: # out of date.
-            content, hash = self._get_file(domain, gateway)
-            self.robots_txt_hashes[domain] = hash
-            if content in ("", b""):
-                logging(f"Failed to fetch robots.txt: {domain}. Applying unguided_access_policy.", LOG_ERROR)
-                return config[UNGUIDED_ACCESS_POLICY] == "free"
-            self.rules[domain] = self.parse_robotstxt(content)
-            return self.check_rules(self.rules[domain], path)
+
+        # else the content is out of date.
+        content, filehash = self._get_file(domain, gateway)
+        self.robots_txt_hashes[domain] = filehash
+        if content in ("", b""):
+            logging(f"Failed to fetch robots.txt: {domain}. "
+                "Applying unguided_access_policy.", LOG_ERROR)
+            return config[UNGUIDED_ACCESS_POLICY] == "free"
+        self.rules[domain] = self.parse_robotstxt(content)
+        return self.check_rules(self.rules[domain], path)
 
     def _get_hash(self, domain):
         try:
@@ -70,8 +73,8 @@ class RobotsFile(object):
         content = gateway.express_request(robolink)[0].decode("utf-8")
         if len(content) == 0:
             return "", 0
-        hash = self.globalcache.store(domain, content, "robots.txt", DURATION_DAY)
-        return (content, hash)
+        filehash = self.globalcache.store(domain, content, "robots.txt", DURATION_DAY)
+        return (content, filehash)
 
     def parse_robotstxt(self, content : str) -> List[Callable[str, bool]]:
         """Parse the robots.txt file. Returns a list of functions that take some
@@ -101,9 +104,11 @@ class RobotsFile(object):
                 agent = line.split(":")[1].strip()
                 continue
 
-            if agent in ("*", config[AGENT_NAME]) and line.startswith("Allow:"): # relevant allow clause
+            # relevant allow clause
+            if agent in ("*", config[AGENT_NAME]) and line.startswith("Allow:"):
                 rl = line.split(":")[1].strip()
-                if rl == "": continue
+                if rl == "":
+                    continue
                 rl = rl.replace("*", "(.*)") # get it into re form
                 if rl.endswith("/"): # implicit wildcard made explicit
                     rl = rl + ".*"
@@ -112,10 +117,12 @@ class RobotsFile(object):
                         return True, "!"
                     return True, ""
                 rules.append(partial(check, rule = re.compile(rl)))
-            
-            if agent in ("*", config[AGENT_NAME]) and line.startswith("Disallow:"): # relevant diallow clause
+
+            # relevant disallow clause
+            if agent in ("*", config[AGENT_NAME]) and line.startswith("Disallow:"):
                 rl = line.split(":")[1].strip()
-                if rl == "": continue
+                if rl == "":
+                    continue
                 rl = rl.replace("*", "(.*)")
                 if rl.endswith("/"):
                     rl = rl + ".*"
@@ -127,8 +134,10 @@ class RobotsFile(object):
 
         return rules
 
-    def check_rules(self, rules : List[Callable[str, bool]], link : str, is_full_url : bool = False) -> bool:
-        """Check if the robots.txt rules allow a URL given the return from parse_robots_txt.
+    def check_rules(self, rules : List[Callable[str, bool]], link : str,
+            is_full_url : bool = False) -> bool:
+        """Check if the robots.txt rules allow a URL given
+        the return from parse_robots_txt.
 
         Parameters:
         -------------
@@ -149,10 +158,3 @@ class RobotsFile(object):
             if l[1] == "!":
                 res = l[0]
         return res
-
-
-
-
-        
-
-        
