@@ -50,14 +50,22 @@ def extract_domain(url : str) -> str:
 
 def extract_tld(url : str) -> str:
     """Returns, given some url, the top level domain name.
+
+    If the string passed in is not an url, it will raise an InputError.
     """
 
     return __extract(url).group(6)
 
-def extract_local_path_and_args(url : str)-> str:
-    """Given url, it returns the local path and arguments in the url."""
+def extract_local_path_and_args(url : str) -> str:
+    """Given url, it returns the local path and arguments in the url.
 
-    return __extract(url).group(7)
+    If the string passed in is not an url, it will raise an InputError.
+    """
+
+    s = __extract(url).group(7)
+    if s is None:
+        return ""
+    return s
 
 def add_protocol(protocol : str, url : str) -> str:
     """Adds a protocol to an url that has no protocol yet specified.
