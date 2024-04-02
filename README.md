@@ -7,6 +7,7 @@
 
 ![Linting Score](https://img.shields.io/badge/Linting_score-9.52/10.0-green)
 ![Test Coverage](https://img.shields.io/badge/Test_coverage-87%25-green)
+![Views](https://public-view-counter.glitch.me/get_counter?id=id5odw12e5w)
 
 ## The project - goals
 
