@@ -73,7 +73,7 @@ Note: If you require Javascript then make sure you have Firefox because this is 
 ## How to use it
 
 Basic use is fairly straight forward. *ALMOST ALL* calls the user performs is using the Project class.
-For more examples and how to programmatically access the results, enable compression, using profiles, etc. check out ![the tutorial](TUTORIAL.md).
+For more examples and how to programmatically access the results, enable compression, using profiles, etc. check out [the tutorial](TUTORIAL.md).
 
 ```python
 from webchecks import Project
