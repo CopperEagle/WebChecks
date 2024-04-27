@@ -56,7 +56,13 @@ cd path/to/new/venv
 source bin/activate
 ```
 
-Then download the code, navigate into that directory and run
+Then do
+
+```bash
+pip3 install webchecks
+```
+
+or download the code, navigate into that directory and run
 
 ```bash
 pip3 install -r requirements.txt
