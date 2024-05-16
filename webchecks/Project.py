@@ -88,6 +88,7 @@ class Project:
         return self.acc_node
 
     def _setup(self):
+        """Setup method setting up the required folders. Do not use."""
         logging("Initializing project")
         try:
             os.mkdir(self.root)
@@ -108,6 +109,8 @@ class Project:
         logging("Finished initializing")
 
     def __report(self):
+        """Reporter method that will be registered to be called at shutdown. Will print
+        and write the report to disk."""
         s = self.reporter.print()
         with self.open(os.path.join(self.root, "REPORT.txt"), "w") as f:
             f.write(s)
