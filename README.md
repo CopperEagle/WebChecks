@@ -72,6 +72,8 @@ Note: If you require Javascript then make sure you have Firefox because this is 
 
 ## How to use it
 
+For the tutorial, please go to the [wiki](https://github.com/CopperEagle/WebChecks/wiki) or visit the [tutorial page](TUTORIAL.md).
+
 Basic use is fairly straight forward. *ALMOST ALL* calls the user performs is using the Project class.
 For more examples and how to programmatically access the results, enable compression, using profiles, etc. check out [the tutorial](TUTORIAL.md).
 
