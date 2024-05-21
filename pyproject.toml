@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "webchecks"
-version = "0.1.1"
+version = "0.1.2"
 description = " WebChecks is a BSD-licensed web search and research tool in Python traversing a given set of domains. "
 readme = "README.md"
 authors = [{ name = "CopperEagle" }]
