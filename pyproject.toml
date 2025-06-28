@@ -19,7 +19,7 @@ dependencies = [
     "beautifulsoup4==4.12.2",
 	"bs4==0.0.1",
 	"python-dotenv==1.0.0",
-	"requests==2.32.0",
+	"requests==2.32.4",
 	"selenium==4.12.0",
 	"selenium-wire==5.1.0",
 	"typing_extensions==4.7.1",
